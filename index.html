@@ -1,41 +1,151 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Niks ki Rasoi</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <style>
-body{font-family:Arial;padding:20px;background:#f5f5f5}
-.card{background:white;padding:15px;margin:10px 0;border-radius:10px}
-button{padding:10px}
+body{
+    font-family:Arial,sans-serif;
+    background:#f5f5f5;
+    margin:0;
+    padding:20px;
+}
+
+h1{
+    text-align:center;
+}
+
+#table{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.cart{
+    background:white;
+    padding:15px;
+    border-radius:12px;
+    margin-bottom:20px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+.menu-item{
+    background:white;
+    padding:15px;
+    border-radius:12px;
+    margin-bottom:15px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+button{
+    background:#28a745;
+    color:white;
+    border:none;
+    padding:10px 15px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#218838;
+}
+
+#orderBtn{
+    width:100%;
+    margin-top:10px;
+    font-size:16px;
+}
 </style>
 </head>
+
 <body>
 
 <h1>🍽️ Niks ki Rasoi</h1>
 
+<h2 id="table"></h2>
+
+<div class="cart">
+    <h3>🛒 Cart Items: <span id="cartCount">0</span></h3>
+    <h3>Total Bill: ₹<span id="total">0</span></h3>
+
+    <button id="orderBtn" onclick="placeOrder()">
+        Place Order
+    </button>
+</div>
+
+<div class="menu-item">
+    <h3>Paneer Tikka</h3>
+    <p>₹220</p>
+    <button onclick="addItem('Paneer Tikka',220)">Add</button>
+</div>
+
+<div class="menu-item">
+    <h3>Veg Biryani</h3>
+    <p>₹180</p>
+    <button onclick="addItem('Veg Biryani',180)">Add</button>
+</div>
+
+<div class="menu-item">
+    <h3>Cold Coffee</h3>
+    <p>₹120</p>
+    <button onclick="addItem('Cold Coffee',120)">Add</button>
+</div>
+
+<div class="menu-item">
+    <h3>Butter Naan</h3>
+    <p>₹40</p>
+    <button onclick="addItem('Butter Naan',40)">Add</button>
+</div>
+
 <script>
+
 const params = new URLSearchParams(window.location.search);
 const table = params.get("table") || "Unknown";
-document.write("<h3>Table No: " + table + "</h3>");
+
+document.getElementById("table").innerHTML =
+"Table No: " + table;
+
+let cart = [];
+let total = 0;
+
+function addItem(name, price){
+
+    cart.push({
+        name:name,
+        price:price
+    });
+
+    total += price;
+
+    document.getElementById("cartCount").innerText =
+    cart.length;
+
+    document.getElementById("total").innerText =
+    total;
+}
+
+function placeOrder(){
+
+    if(cart.length===0){
+        alert("Please add items first!");
+        return;
+    }
+
+    let summary = "🍽️ Niks ki Rasoi\\n";
+    summary += "Table No: " + table + "\\n\\n";
+
+    cart.forEach(item=>{
+        summary += item.name + " - ₹" +
+        item.price + "\\n";
+    });
+
+    summary += "\\nTotal: ₹" + total;
+
+    alert(summary);
+}
+
 </script>
-
-<div class="card">
-<h3>Paneer Tikka</h3>
-<p>₹220</p>
-<button>Add</button>
-</div>
-
-<div class="card">
-<h3>Veg Biryani</h3>
-<p>₹180</p>
-<button>Add</button>
-</div>
-
-<div class="card">
-<h3>Cold Coffee</h3>
-<p>₹120</p>
-<button>Add</button>
-</div>
 
 </body>
 </html>
