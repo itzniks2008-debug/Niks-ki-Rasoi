@@ -227,25 +227,25 @@ function placeOrder(){
         return;
     }
 
-    let bill =
-    "🍽️ Niks ki Rasoi\n\n";
+    let message = "🍽️ Niks ki Rasoi%0A%0A";
 
-    bill +=
-    "Table No: " + table + "\n\n";
+    message += "Table No: " + table + "%0A%0A";
 
     for(let item in quantities){
 
         if(quantities[item] > 0){
 
-            bill +=
-            item + " x " +
-            quantities[item] + "\n";
+            message += item + " x " +
+            quantities[item] + "%0A";
         }
     }
 
-    bill += "\nTotal Bill: ₹" + total;
+    message += "%0ATotal Bill: ₹" + total;
 
-    alert(bill);
+    window.open(
+      "https://wa.me/919309783681?text=" + message,
+      "_blank"
+    );
 }
 
 </script>
