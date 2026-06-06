@@ -74,7 +74,15 @@ h1,h2{
 <h1>🍽️ Niks ki Rasoi</h1>
 
 <h2 id="table"></h2>
+<div class="cart">
+    <h3>Customer Details</h3>
 
+    <input
+    type="text"
+    id="customerName"
+    placeholder="Enter Your Name"
+    style="width:100%;padding:12px;font-size:16px;border-radius:8px;border:1px solid #ccc;">
+</div>
 <div class="cart">
     <h2>🛒 Cart Items: <span id="cartCount">0</span></h2>
     <h2>Total Bill: ₹<span id="total">0</span></h2>
@@ -216,6 +224,14 @@ function updateUI(){
 
 function placeOrder(){
 
+    const customer =
+    document.getElementById("customerName").value;
+
+    if(customer.trim() === ""){
+        alert("Please enter your name");
+        return;
+    }
+
     const cartCount =
     quantities["Paneer Tikka"] +
     quantities["Veg Biryani"] +
@@ -227,26 +243,34 @@ function placeOrder(){
         return;
     }
 
-    let message = "🍽️ Niks ki Rasoi%0A%0A";
+    let message =
+    "🍽️ Niks ki Rasoi%0A%0A";
 
-    message += "Table No: " + table + "%0A%0A";
+    message +=
+    "Customer: " + customer + "%0A";
+
+    message +=
+    "Table No: " + table + "%0A%0A";
 
     for(let item in quantities){
 
         if(quantities[item] > 0){
 
-            message += item + " x " +
+            message +=
+            item + " x " +
             quantities[item] + "%0A";
         }
     }
 
-    message += "%0ATotal Bill: ₹" + total;
+    message +=
+    "%0ATotal Bill: ₹" + total;
 
     window.open(
-      "https://wa.me/919309783681?text=" + message,
-      "_blank"
+    "https://wa.me/919309783681?text=" + message,
+    "_blank"
     );
 }
+
 
 </script>
 
