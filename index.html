@@ -145,7 +145,23 @@ Total Bill:
 <button
 class="place-btn"
 onclick="placeOrder()">
-Place Order
+🍽️ Place Order
+</button>
+
+<br><br>
+
+<button
+class="place-btn"
+onclick="callWaiter()">
+🔔 Call Waiter
+</button>
+
+<br><br>
+
+<button
+class="place-btn"
+onclick="requestBill()">
+🧾 Request Bill
 </button>
 
 </div>
@@ -428,7 +444,57 @@ message,
 "_blank"
 );
 }
+function callWaiter(){
 
+let message =
+"🔔 Call Waiter%0A%0A";
+
+message +=
+"Customer: " +
+customer +
+"%0A";
+
+message +=
+"Table No: " +
+table +
+"%0A%0A";
+
+message +=
+"Please send a waiter.";
+
+window.open(
+"https://wa.me/919309783681?text=" +
+message,
+"_blank"
+);
+
+}
+
+function requestBill(){
+
+let message =
+"🧾 Bill Request%0A%0A";
+
+message +=
+"Customer: " +
+customer +
+"%0A";
+
+message +=
+"Table No: " +
+table +
+"%0A%0A";
+
+message +=
+"Please bring the bill.";
+
+window.open(
+"https://wa.me/919309783681?text=" +
+message,
+"_blank"
+);
+
+}
 </script>
 
 </body>
