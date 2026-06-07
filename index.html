@@ -410,8 +410,72 @@ document.getElementById(
 ).innerText =
 total;
 }
+
 function placeOrder(){
-  alert("Order button works!");
+
+let cartCount = 0;
+let total = 0;
+
+let message =
+"🍽️ Niks ki Rasoi%0A%0A";
+
+message +=
+"Customer: " +
+customer +
+"%0A";
+
+message +=
+"Table No: " +
+table +
+"%0A%0A";
+
+for(let item in quantities){
+
+if(quantities[item] > 0){
+
+message +=
+item +
+" x " +
+quantities[item] +
+"%0A";
+
+cartCount += quantities[item];
+
+total +=
+quantities[item] *
+prices[item];
+
+}
+}
+
+if(cartCount===0){
+alert("Please add items first!");
+return;
+}
+
+message +=
+"%0A💰 Total Bill: ₹" +
+total;
+
+window.open(
+"https://wa.me/919309783681?text=" +
+message,
+"_blank"
+);
+
+setTimeout(()=>{
+
+quantities["Paneer Tikka"]=0;
+quantities["Veg Biryani"]=0;
+quantities["Cold Coffee"]=0;
+quantities["Butter Naan"]=0;
+
+updateUI();
+
+alert("✅ Order sent successfully!");
+
+},500);
+
 }
 
 function requestBill(){
