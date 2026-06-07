@@ -440,9 +440,14 @@ for(let item in quantities){
 if(quantities[item] > 0){
 
 message +=
+"🍴 " +
 item +
-" x " +
+" ₹" +
+prices[item] +
+" × " +
 quantities[item] +
+" = ₹" +
+(prices[item] * quantities[item]) +
 "%0A";
 
 cartCount += quantities[item];
