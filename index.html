@@ -417,26 +417,23 @@ function placeOrder(){
 
   setTimeout(() => {
 
-    // Clear cart
     quantities["Paneer Tikka"] = 0;
     quantities["Veg Biryani"] = 0;
     quantities["Cold Coffee"] = 0;
     quantities["Butter Naan"] = 0;
 
-    // Update quantities on screen
     document.getElementById("paneerQty").innerText = 0;
     document.getElementById("biryaniQty").innerText = 0;
     document.getElementById("coffeeQty").innerText = 0;
     document.getElementById("naanQty").innerText = 0;
 
-    // Reset totals
     cartCount = 0;
     total = 0;
 
     document.getElementById("cartCount").innerText = 0;
     document.getElementById("total").innerText = 0;
 
-    alert("✅ Order sent successfully!\n\nPlease wait while we prepare your food 🍽️");
+    alert("✅ Order sent successfully!");
 
   }, 500);
 
