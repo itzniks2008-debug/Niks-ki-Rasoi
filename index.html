@@ -34,6 +34,7 @@ margin-bottom:20px;
 .card{
 background:white;
 padding:12px;
+min-height:auto;
 border-radius:20px;
 margin-bottom:12px;
 box-shadow:0 4px 12px rgba(0,0,0,0.08);
@@ -411,6 +412,35 @@ total;
 }
 
 function placeOrder(){
+
+  window.open(url, "_blank");
+
+  setTimeout(() => {
+
+    // Clear cart
+    quantities["Paneer Tikka"] = 0;
+    quantities["Veg Biryani"] = 0;
+    quantities["Cold Coffee"] = 0;
+    quantities["Butter Naan"] = 0;
+
+    // Update quantities on screen
+    document.getElementById("paneerQty").innerText = 0;
+    document.getElementById("biryaniQty").innerText = 0;
+    document.getElementById("coffeeQty").innerText = 0;
+    document.getElementById("naanQty").innerText = 0;
+
+    // Reset totals
+    cartCount = 0;
+    total = 0;
+
+    document.getElementById("cartCount").innerText = 0;
+    document.getElementById("total").innerText = 0;
+
+    alert("✅ Order sent successfully!\n\nPlease wait while we prepare your food 🍽️");
+
+  }, 500);
+
+}
 
 let cartCount = 0;
 let total = 0;
