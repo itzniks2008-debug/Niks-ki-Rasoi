@@ -267,7 +267,13 @@ Total Bill:
 ₹<span id="total">0</span>
 </h3>
 
-<br>
+<textarea
+id="instructions"
+placeholder="Special Instructions (Optional)"
+style="width:100%;padding:12px;border-radius:10px;margin-top:10px;">
+</textarea>
+
+<br><br>
 
 <button
 class="place-btn"
@@ -453,8 +459,18 @@ alert("Please add items first!");
 return;
 }
 
+const instructions =
+document.getElementById("instructions").value;
+
+if(instructions.trim() !== ""){
+
 message +=
-"%0A💰 Total Bill: ₹" +
+"%0A%0A📝 Special Instructions:%0A" +
+instructions;
+}
+
+message +=
+"%0A%0A💰 Total Bill: ₹" +
 total;
 
 window.open(
