@@ -105,6 +105,16 @@ margin-top:15px;
 font-size:20px;
 font-weight:bold;
 }
+.add-btn{
+background:#198754;
+color:white;
+border:none;
+padding:12px 25px;
+border-radius:10px;
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
+}
 </style>
 </head>
 
@@ -151,23 +161,16 @@ Start Ordering
 
 <div class="qty-box">
 
-<button
-class="qty-btn"
-onclick="changeQty('Paneer Tikka',-1)">
--
-</button>
-
-<span
-class="qty"
-id="paneerQty">
-0
-</span>
+  <div id="paneerControls">
 
 <button
-class="qty-btn"
-onclick="changeQty('Paneer Tikka',1)">
-+
+onclick="addFirstItem('Paneer Tikka')"
+class="add-btn">
+Add
 </button>
+
+  </div>
+
 
 </div>
 </div>
