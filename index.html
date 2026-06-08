@@ -105,16 +105,8 @@ margin-top:15px;
 font-size:20px;
 font-weight:bold;
 }
-.add-btn{
-background:#198754;
-color:white;
-border:none;
-padding:12px 25px;
-border-radius:10px;
-font-size:18px;
-font-weight:bold;
-cursor:pointer;
-}
+
+
 </style>
 </head>
 
@@ -159,20 +151,28 @@ Start Ordering
 <h3>Paneer Tikka</h3>
 <p>₹220</p>
 
-<div class="qty-box">
-
-  <div id="paneerControls">
+  <div class="qty-box">
 
 <button
-onclick="addFirstItem('Paneer Tikka')"
-class="add-btn">
-Add
+class="qty-btn"
+onclick="changeQty('Paneer Tikka',-1)">
+-
+</button>
+
+<span
+class="qty"
+id="paneerQty">
+0
+</span>
+
+<button
+class="qty-btn"
+onclick="changeQty('Paneer Tikka',1)">
++
 </button>
 
   </div>
 
-
-</div>
 </div>
 
 <div class="card">
