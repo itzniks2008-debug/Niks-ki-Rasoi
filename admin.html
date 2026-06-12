@@ -112,7 +112,9 @@ async function loadOrders() {
 
     container.innerHTML = "";
 
-    snapshot.forEach((docSnap) => {
+    const docs = snapshot.docs.reverse();
+
+docs.forEach((docSnap) => {
 
       const order = docSnap.data();
 
@@ -180,6 +182,10 @@ window.updateStatus = async function(orderId, newStatus){
 }
 
 loadOrders();
+
+setInterval(() => {
+    loadOrders();
+}, 5000);
 
 </script>
 
