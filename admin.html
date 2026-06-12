@@ -48,6 +48,22 @@ font-weight:bold;
   font-size:18px;
   line-height:1.6;
 }
+
+.status{
+font-weight:bold;
+}
+
+.Pending{
+color:#dc3545;
+}
+
+.Preparing{
+color:#fd7e14;
+}
+
+.Served{
+color:#198754;
+}
 </style>
 </head>
 
@@ -97,9 +113,12 @@ async function loadOrders(){
 
     container.innerHTML = "";
 
-    snapshot.forEach(doc => {
 
-      const order = doc.data();
+      snapshot.forEach(doc => {
+
+  const order = doc.data();
+
+  container.innerHTML += `
 
   container.innerHTML += `
 <div class="order">
@@ -108,7 +127,9 @@ async function loadOrders(){
 
   <pre class="orderText">${order.orderText}</pre>
 
-  <p><b>Status:</b> ${order.status}</p>
+  <p class="status ${order.status}">
+<b>Status:</b> ${order.status}
+</p>
 
   <button onclick="updateStatus('${doc.id}','Preparing')">
     👨‍🍳 Preparing
