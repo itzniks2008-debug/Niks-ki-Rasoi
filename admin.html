@@ -71,6 +71,9 @@ color:#198754;
 
 <h1>🍽️ Niks Ki Rasoi Admin Panel</h1>
 
+<audio id="bell" preload="auto">
+  <source src="https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg" type="audio/ogg">
+</audio>
 <div id="orders"></div>
 
 <script type="module">
@@ -98,7 +101,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
+let lastOrderCount = 0;
 async function loadOrders() {
 
   try {
@@ -106,7 +109,11 @@ async function loadOrders() {
     const snapshot = await getDocs(
       collection(db, "orders")
     );
+if (lastOrderCount !== 0 && snapshot.size > lastOrderCount) {
+  document.getElementById("bell").play();
+}
 
+lastOrderCount = snapshot.size;
     const container =
       document.getElementById("orders");
 
