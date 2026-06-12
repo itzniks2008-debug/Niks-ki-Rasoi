@@ -74,6 +74,9 @@ color:#198754;
 <audio id="bell" preload="auto">
   <source src="https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg" type="audio/ogg">
 </audio>
+  <button onclick="document.getElementById('bell').play()">
+🔔 Test Bell
+  </button>
 <div id="orders"></div>
 
 <script type="module">
@@ -200,7 +203,13 @@ loadOrders();
 setInterval(() => {
     loadOrders();
 }, 5000);
-
+document.addEventListener("click", () => {
+  const bell = document.getElementById("bell");
+  bell.play().then(() => {
+    bell.pause();
+    bell.currentTime = 0;
+  }).catch(() => {});
+}, { once: true });
 </script>
 
 </body>
