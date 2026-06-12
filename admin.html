@@ -59,7 +59,9 @@ from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 import {
 getFirestore,
 collection,
-getDocs
+getDocs,
+updateDoc,
+doc
 }
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
@@ -93,14 +95,24 @@ async function loadOrders(){
 
       const order = doc.data();
 
-      container.innerHTML += `
-        <div class="order">
-          <h3>👤 ${order.customerName}</h3>
-          <p>🍽️ Table ${order.tableNumber}</p>
-          <div class="orderText">${order.orderText.replace(/\n/g,"<br>")}</div>
-          <p>🟡 ${order.status}</p>
-        </div>
-      `;
+  container.innerHTML += `
+<div class="order">
+  <h3>👤 ${order.customerName}</h3>
+  <p>🍽️ Table ${order.tableNumber}</p>
+
+  <pre>${order.orderText}</pre>
+
+  <p><b>Status:</b> ${order.status}</p>
+
+  <button onclick="updateStatus('${doc.id}','Preparing')">
+    👨‍🍳 Preparing
+  </button>
+
+  <button onclick="updateStatus('${doc.id}','Served')">
+    ✅ Served
+  </button>
+</div>
+`;
 
     });
 
@@ -112,7 +124,17 @@ async function loadOrders(){
 
 }
 
-loadOrders();
+window.updateStatus = async function(orderId, newStatus){
+
+  await updateDoc(
+    doc(db,"orders",orderId),
+    {
+      status:newStatus
+    }
+  );
+
+  loadOrders();
+}
 
 </script>
 
