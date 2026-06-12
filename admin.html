@@ -117,11 +117,11 @@ async function loadOrders(){
   snapshot.forEach(doc => {
 
   const order = doc.data();
+  console.log(order);
 
   if(order.status === "Served"){
     return;
   }
-
   container.innerHTML += `
 <div class="order">
   <h3>👤 ${order.customerName}</h3>
