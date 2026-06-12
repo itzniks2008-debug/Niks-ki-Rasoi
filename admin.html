@@ -110,7 +110,9 @@ async function loadOrders() {
       collection(db, "orders")
     );
 if (lastOrderCount !== 0 && snapshot.size > lastOrderCount) {
-  document.getElementById("bell").play();
+const bell = document.getElementById("bell");
+bell.currentTime = 0;
+bell.play().catch(err => console.log(err));
 }
 
 lastOrderCount = snapshot.size;
