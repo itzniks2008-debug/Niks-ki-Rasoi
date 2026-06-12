@@ -420,7 +420,7 @@ document.getElementById(
 total;
 }
 
-function placeOrder(){
+async function placeOrder(){
 
 let cartCount = 0;
 let total = 0;
@@ -480,11 +480,29 @@ instructions;
 message += "%0A━━━━━━━━━━━━━━%0A";
 message += "💰 Total Bill: ₹" + total;
 
-window.open(
-"https://wa.me/919309783681?text=" +
-message,
-"_blank"
-);
+try {
+
+  await window.addDoc(
+    window.collection(window.db, "orders"),
+    {
+      customerName: customer,
+      tableNumber: table,
+      total: total,
+      status: "Pending",
+      orderText: message,
+      createdAt: new Date().toISOString()
+    }
+  );
+
+  alert("✅ Order saved successfully!");
+
+} catch(error) {
+
+  console.error(error);
+
+  alert("❌ Order save failed");
+
+}
 
 setTimeout(()=>{
 
