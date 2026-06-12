@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Niks Ki Rasoi Admin</title>
+
+<style>
+body{
+font-family:Arial,sans-serif;
+background:#f4f4f4;
+padding:20px;
+}
+
+h1{
+text-align:center;
+color:#198754;
+}
+
+.order{
+background:white;
+padding:15px;
+margin-bottom:15px;
+border-radius:10px;
+box-shadow:0 2px 5px rgba(0,0,0,0.2);
+}
+
+.pending{
+color:orange;
+font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🍽️ Niks Ki Rasoi Admin Panel</h1>
+
+<div id="orders"></div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyDz17AZWhfnOnO-DbC4CYWsoTAv4ojgyRE"
+authDomain: "niks-ordering-system.firebaseapp.com",
+projectId: "niks-ordering-system",
+storageBucket: "niks-ordering-system.firebasestorage.app",
+messagingSenderId: "486739954103",
+appId: "1:486739954103:web:5a9818c0c117b319f78032"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+async function loadOrders(){
+
+const snapshot =
+await getDocs(collection(db,"orders"));
+
+const container =
+document.getElementById("orders");
+
+container.innerHTML="";
+
+snapshot.forEach(doc=>{
+
+const order=doc.data();
+
+container.innerHTML += `
+<div class="order">
+<h3>👤 ${order.customerName}</h3>
+<p>🪑 Table ${order.tableNumber}</p>
+<pre>${order.orderText}</pre>
+<p class="pending">🟡 ${order.status}</p>
+</div>
+`;
+
+});
+
+}
+
+loadOrders();
+
+</script>
+
+</body>
+</html>
