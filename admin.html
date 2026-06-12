@@ -91,7 +91,7 @@ import {
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
+  apiKey: "AIzaSyDz17AZWhfnOnO-DbC4CYWsoTAv4ojgyRE",
   authDomain: "niks-ordering-system.firebaseapp.com",
   projectId: "niks-ordering-system",
   storageBucket: "niks-ordering-system.firebasestorage.app",
@@ -101,7 +101,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-let lastOrderCount = 0;
+let lastOrderTime = "";
 async function loadOrders() {
 
   try {
@@ -109,13 +109,35 @@ async function loadOrders() {
     const snapshot = await getDocs(
       collection(db, "orders")
     );
-if (lastOrderCount !== 0 && snapshot.size > lastOrderCount) {
-const bell = document.getElementById("bell");
-bell.currentTime = 0;
-bell.play().catch(err => console.log(err));
-}
+const docs = snapshot.docs.sort((a, b) => {
+  const timeA = a.data().createdAt || "";
+  const timeB = b.data().createdAt || "";
+  return timeB.localeCompare(timeA);
+});
 
-lastOrderCount = snapshot.size;
+if (docs.length > 0) {
+
+  const newestTime =
+    docs[0].data().createdAt || "";
+
+  if (
+    latestOrderTime &&
+    newestTime !== latestOrderTime
+  ) {
+
+    const bell =
+      document.getElementById("bell");
+
+    bell.currentTime = 0;
+
+    bell.play().catch(err =>
+      console.log(err)
+    );
+
+  }
+
+  latestOrderTime = newestTime;
+}
     const container =
       document.getElementById("orders");
 
