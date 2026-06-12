@@ -101,7 +101,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-let latestOrderTime = "";
+let latestOrderId = "";
 async function loadOrders() {
 
   try {
@@ -117,12 +117,11 @@ const docs = snapshot.docs.sort((a, b) => {
 
 if (docs.length > 0) {
 
-  const newestTime =
-    docs[0].data().createdAt || "";
+  const newestOrderId = docs[0].id;
 
   if (
-    latestOrderTime &&
-    newestTime !== latestOrderTime
+    latestOrderId &&
+    newestOrderId !== latestOrderId
   ) {
 
     const bell =
@@ -136,7 +135,7 @@ if (docs.length > 0) {
 
   }
 
-  latestOrderTime = newestTime;
+  latestOrderId = newestOrderId;
 }
     const container =
       document.getElementById("orders");
