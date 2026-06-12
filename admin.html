@@ -143,14 +143,6 @@ if (docs.length > 0) {
 
     container.innerHTML = "";
 
-    const docs = snapshot.docs.sort((a, b) => {
-
-  const timeA = a.data().createdAt || "";
-  const timeB = b.data().createdAt || "";
-
-  return timeB.localeCompare(timeA);
-
-});
 
 docs.forEach((docSnap) => {
 
