@@ -114,14 +114,37 @@ async function loadOrders(){
     container.innerHTML = "";
 
 
-      snapshot.forEach(doc => {
+  snapshot.forEach(doc => {
 
   const order = doc.data();
 
-  container.innerHTML += `
+  if(order.status === "Served"){
+    return;
+  }
 
   container.innerHTML += `
 <div class="order">
+  <h3>👤 ${order.customerName}</h3>
+  <p>🍽️ Table ${order.tableNumber}</p>
+
+  <pre class="orderText">${order.orderText}</pre>
+
+  <p class="status ${order.status}">
+    <b>Status:</b> ${order.status}
+  </p>
+
+  <button onclick="updateStatus('${doc.id}','Preparing')">
+    👨‍🍳 Preparing
+  </button>
+
+  <button onclick="updateStatus('${doc.id}','Served')">
+    ✅ Served
+  </button>
+</div>
+`;
+
+});
+    
   <h3>👤 ${order.customerName}</h3>
   <p>🍽️ Table ${order.tableNumber}</p>
 
