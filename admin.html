@@ -101,7 +101,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-let lastOrderTime = "";
+let latestOrderTime = "";
 async function loadOrders() {
 
   try {
@@ -215,7 +215,7 @@ loadOrders();
 
 setInterval(() => {
     loadOrders();
-}, 5000);
+}, 3000);
 document.addEventListener("click", () => {
   const bell = document.getElementById("bell");
   bell.play().then(() => {
