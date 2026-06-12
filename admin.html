@@ -100,7 +100,7 @@ async function loadOrders(){
   <h3>👤 ${order.customerName}</h3>
   <p>🍽️ Table ${order.tableNumber}</p>
 
-  <pre>${order.orderText}</pre>
+  <div class="orderText">${order.orderText}</div>
 
   <p><b>Status:</b> ${order.status}</p>
 
@@ -135,7 +135,8 @@ window.updateStatus = async function(orderId, newStatus){
 
   loadOrders();
 }
-
+loadOrders();
+  
 </script>
 
 </body>
