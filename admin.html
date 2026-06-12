@@ -117,6 +117,7 @@ async function loadOrders(){
   snapshot.forEach(doc => {
 
   const order = doc.data();
+    alert(JSON.stringify(order));
   console.log(order);
 
   if(order.status === "Served"){
@@ -166,9 +167,10 @@ async function loadOrders(){
 
     });
 
-  } catch(error){
-
-    alert(error.message);
+  } 
+  catch(error){
+      console.error(error);
+      alert("ERROR:" + error.message);
 
   }
 
