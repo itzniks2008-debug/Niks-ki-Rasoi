@@ -538,6 +538,24 @@ message,
 );
 
 }
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDz17AZWhfnOnO-DbC4CYWsoTAv4ojgyRE",
+  authDomain: "niks-ordering-system.firebaseapp.com",
+  projectId: "niks-ordering-system",
+  storageBucket: "niks-ordering-system.firebasestorage.app",
+  messagingSenderId: "486739954103",
+  appId: "1:486739954103:web:5a9818c0c117b319f78032",
+  measurementId: "G-92VL3H2VTL"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+window.db = db;
 </script>
 
 </body>
