@@ -479,7 +479,19 @@ instructions;
 
 message += "%0A━━━━━━━━━━━━━━%0A";
 message += "💰 Total Bill: ₹" + total;
+let cleanOrder = "";
 
+cleanOrder += "Restaurant: Niks ki Rasoi\n";
+cleanOrder += "Customer: " + customer + "\n";
+cleanOrder += "Table: " + table + "\n\n";
+
+for (let item in quantities) {
+  if (quantities[item] > 0) {
+    cleanOrder += item + " x" + quantities[item] + "\n";
+  }
+}
+
+cleanOrder += "\nTotal: ₹" + total;
 try {
 
   await window.addDoc(
@@ -489,7 +501,7 @@ try {
       tableNumber: table,
       total: total,
       status: "Pending",
-      orderText: message,
+      orderText: cleanorder,
       createdAt: new Date().toISOString()
     }
   );
