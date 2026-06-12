@@ -63,35 +63,38 @@ const db = getFirestore(app);
 
 async function loadOrders(){
 
-try {
+  try {
 
-const snapshot =
-await getDocs(collection(db,"orders"));
+    const snapshot =
+    await getDocs(collection(db,"orders"));
 
-alert("Found " + snapshot.size + " orders");
+    alert("Found " + snapshot.size + " orders");
 
-const container =
-document.getElementById("orders");
+    const container =
+    document.getElementById("orders");
 
-snapshot.forEach(doc=>{
+    container.innerHTML = "";
 
-const order = doc.data();
+    snapshot.forEach(doc => {
 
-container.innerHTML += `
-<div class="order">
-<h3>${order.customerName}</h3>
-<p>Table ${order.tableNumber}</p>
-<pre>${order.orderText}</pre>
-</div>
-`;
+      const order = doc.data();
 
-});
+      container.innerHTML += `
+        <div class="order">
+          <h3>👤 ${order.customerName}</h3>
+          <p>🍽️ Table ${order.tableNumber}</p>
+          <pre>${order.orderText}</pre>
+          <p>🟡 ${order.status}</p>
+        </div>
+      `;
 
-} catch(error){
+    });
 
-alert(error.message);
+  } catch(error){
 
-}
+    alert(error.message);
+
+  }
 
 }
 
