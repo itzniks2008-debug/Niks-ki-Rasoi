@@ -540,7 +540,13 @@ message,
 }
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+import {
+  getFirestore,
+  collection,
+  addDoc
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+  window.addDoc = addDoc;
+window.collection = collection;
 
 const firebaseConfig = {
   apiKey: "AIzaSyDz17AZWhfnOnO-DbC4CYWsoTAv4ojgyRE",
