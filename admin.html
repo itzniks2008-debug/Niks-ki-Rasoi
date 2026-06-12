@@ -79,98 +79,80 @@ import { initializeApp }
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 
 import {
-getFirestore,
-collection,
-getDocs,
-updateDoc,
-doc
+  getFirestore,
+  collection,
+  getDocs,
+  updateDoc,
+  doc
 }
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 const firebaseConfig = {
-apiKey: "AIzaSyDz17AZWhfnOnO-DbC4CYWsoTAv4ojgyRE",
-authDomain: "niks-ordering-system.firebaseapp.com",
-projectId: "niks-ordering-system",
-storageBucket: "niks-ordering-system.firebasestorage.app",
-messagingSenderId: "486739954103",
-appId: "1:486739954103:web:5a9818c0c117b319f78032"
+  apiKey: "YOUR_API_KEY",
+  authDomain: "niks-ordering-system.firebaseapp.com",
+  projectId: "niks-ordering-system",
+  storageBucket: "niks-ordering-system.firebasestorage.app",
+  messagingSenderId: "486739954103",
+  appId: "1:486739954103:web:5a9818c0c117b319f78032"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-async function loadOrders(){
+async function loadOrders() {
 
   try {
 
-    const snapshot =
-    await getDocs(collection(db,"orders"));
-
-    alert("Found " + snapshot.size + " orders");
+    const snapshot = await getDocs(
+      collection(db, "orders")
+    );
 
     const container =
-    document.getElementById("orders");
+      document.getElementById("orders");
 
     container.innerHTML = "";
 
+    snapshot.forEach((docSnap) => {
 
-  snapshot.forEach(doc => {
+      const order = docSnap.data();
 
-  const order = doc.data();
-    alert(JSON.stringify(order));
-  console.log(order);
+      // Hide served orders
+      if (order.status === "Served") {
+        return;
+      }
 
-  if(order.status === "Served"){
-    return;
-  }
-  container.innerHTML += `
-<div class="order">
-  <h3>👤 ${order.customerName}</h3>
-  <p>🍽️ Table ${order.tableNumber}</p>
+      container.innerHTML += `
+      <div class="order">
 
-  <pre class="orderText">${order.orderText}</pre>
+        <h3>👤 ${order.customerName || "Unknown"}</h3>
 
-  <p class="status ${order.status}">
-    <b>Status:</b> ${order.status}
-  </p>
+        <p>🍽️ Table ${order.tableNumber || "-"}</p>
 
-  <button onclick="updateStatus('${doc.id}','Preparing')">
-    👨‍🍳 Preparing
-  </button>
+        <pre class="orderText">
+${order.orderText || ""}
+        </pre>
 
-  <button onclick="updateStatus('${doc.id}','Served')">
-    ✅ Served
-  </button>
-</div>
-`;
+        <p class="status ${order.status}">
+          <b>Status:</b> ${order.status}
+        </p>
 
-});
-    
-  <h3>👤 ${order.customerName}</h3>
-  <p>🍽️ Table ${order.tableNumber}</p>
+        <button onclick="updateStatus('${docSnap.id}','Preparing')">
+          👨‍🍳 Preparing
+        </button>
 
-  <pre class="orderText">${order.orderText}</pre>
+        <button onclick="updateStatus('${docSnap.id}','Served')">
+          ✅ Served
+        </button>
 
-  <p class="status ${order.status}">
-<b>Status:</b> ${order.status}
-</p>
-
-  <button onclick="updateStatus('${doc.id}','Preparing')">
-    👨‍🍳 Preparing
-  </button>
-
-  <button onclick="updateStatus('${doc.id}','Served')">
-    ✅ Served
-  </button>
-</div>
-`;
+      </div>
+      `;
 
     });
 
-  } 
-  catch(error){
-      console.error(error);
-      alert("ERROR:" + error.message);
+  } catch (error) {
+
+    console.error(error);
+    alert("Error: " + error.message);
 
   }
 
@@ -178,17 +160,27 @@ async function loadOrders(){
 
 window.updateStatus = async function(orderId, newStatus){
 
-  await updateDoc(
-    doc(db,"orders",orderId),
-    {
-      status:newStatus
-    }
-  );
+  try {
 
-  loadOrders();
+    await updateDoc(
+      doc(db, "orders", orderId),
+      {
+        status: newStatus
+      }
+    );
+
+    loadOrders();
+
+  } catch(error){
+
+    alert(error.message);
+
+  }
+
 }
+
 loadOrders();
-  
+
 </script>
 
 </body>
