@@ -275,8 +275,12 @@ button,
 
 
 <script type="module">
-
 import {
+  getAuth,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+  import {
   initializeApp
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 
@@ -323,6 +327,18 @@ const app =
 const db =
   getFirestore(app);
 
+const auth = getAuth(app);
+
+onAuthStateChanged(auth, (user) => {
+
+  if (!user) {
+    window.location.href = "admin-login.html";
+    return;
+  }
+
+  console.log("Admin authenticated:", user.email);
+
+});
 
 /* VARIABLES */
 
