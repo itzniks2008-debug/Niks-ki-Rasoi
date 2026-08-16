@@ -330,7 +330,7 @@ window.location.replace(
     console.error(error);
 
     errorBox.innerText =
-      "❌ Invalid email or password.";
+  "❌ " + error.code + ": " + error.message;
 
     errorBox.style.display =
       "block";
