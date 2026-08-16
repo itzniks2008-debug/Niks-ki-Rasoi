@@ -1,228 +1,735 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Niks Ki Rasoi Admin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Dal Baati Special | Booking Admin</title>
 
 <style>
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial,sans-serif;
+}
+
 body{
-font-family:Arial,sans-serif;
-background:#f4f4f4;
-padding:20px;
+  background:#f8ead0;
+  color:#4b160f;
+  padding:20px;
 }
 
-h1{
-text-align:center;
-color:#198754;
+.header{
+  background:#4b0f0b;
+  color:white;
+  padding:25px;
+  border-radius:18px;
+  margin-bottom:20px;
+  text-align:center;
+  border:2px solid #d9a441;
 }
 
-.order{
-background:white;
-padding:15px;
-margin-bottom:15px;
-border-radius:10px;
-box-shadow:0 2px 5px rgba(0,0,0,0.2);
+.header h1{
+  color:#f4c65d;
+  margin-bottom:8px;
 }
 
-.pending{
-color:orange;
-font-weight:bold;
+.header p{
+  color:#eadcc0;
 }
 
-.order{
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+  margin-bottom:20px;
+}
+
+.stat{
   background:white;
-  padding:15px;
-  margin:15px 0;
-  border-radius:12px;
-  box-shadow:0 2px 8px rgba(0,0,0,0.1);
+  padding:20px;
+  border-radius:15px;
+  text-align:center;
+  border:1px solid #d9a441;
+  box-shadow:0 3px 10px rgba(0,0,0,.08);
 }
 
-.orderText{
-  white-space:normal;
-  line-height:1.6;
-  margin-top:10px;
+.stat h2{
+  color:#741a12;
+  font-size:30px;
 }
 
-.orderText{
-  white-space:pre-wrap;
-  font-size:18px;
-  line-height:1.6;
+.stat p{
+  color:#777;
+  margin-top:5px;
+}
+
+.booking{
+  background:white;
+  padding:20px;
+  margin-bottom:18px;
+  border-radius:16px;
+  border-left:6px solid #d9a441;
+  box-shadow:0 3px 12px rgba(0,0,0,.12);
+}
+
+.booking.pending{
+  border-left-color:#f0a500;
+}
+
+.booking.confirmed{
+  border-left-color:#198754;
+}
+
+.booking.cancelled{
+  border-left-color:#dc3545;
+  opacity:.7;
+}
+
+.booking-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:15px;
+}
+
+.booking-header h3{
+  color:#65170f;
 }
 
 .status{
-font-weight:bold;
+  padding:7px 12px;
+  border-radius:20px;
+  font-size:13px;
+  font-weight:bold;
 }
 
-.Pending{
-color:#dc3545;
+.status.pending{
+  background:#fff0c2;
+  color:#9a6700;
 }
 
-.Preparing{
-color:#fd7e14;
+.status.confirmed{
+  background:#dff5e5;
+  color:#176b2c;
 }
 
-.Served{
-color:#198754;
+.status.cancelled{
+  background:#ffe1e1;
+  color:#a30000;
 }
+
+.details{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  margin-bottom:15px;
+}
+
+.detail{
+  background:#fffaf0;
+  padding:12px;
+  border-radius:10px;
+}
+
+.detail strong{
+  display:block;
+  color:#741a12;
+  margin-bottom:4px;
+}
+
+.special{
+  background:#fff4d8;
+  padding:12px;
+  border-radius:10px;
+  margin-bottom:15px;
+}
+
+.actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+button,
+.action-link{
+  border:none;
+  padding:11px 16px;
+  border-radius:9px;
+  cursor:pointer;
+  text-decoration:none;
+  font-weight:bold;
+  font-size:14px;
+}
+
+.confirm{
+  background:#198754;
+  color:white;
+}
+
+.cancel{
+  background:#dc3545;
+  color:white;
+}
+
+.call{
+  background:#0d6efd;
+  color:white;
+}
+
+.whatsapp{
+  background:#25d366;
+  color:white;
+}
+
+.empty{
+  background:white;
+  padding:40px;
+  text-align:center;
+  border-radius:15px;
+  color:#777;
+}
+
+.loading{
+  text-align:center;
+  padding:30px;
+  color:#777;
+}
+
+@media(max-width:700px){
+
+  body{
+    padding:10px;
+  }
+
+  .stats{
+    grid-template-columns:1fr;
+  }
+
+  .details{
+    grid-template-columns:1fr;
+  }
+
+  .booking-header{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .actions button,
+  .actions a{
+    width:100%;
+    text-align:center;
+  }
+
+}
+
 </style>
 </head>
 
 <body>
 
-<h1>🍽️ Niks Ki Rasoi Admin Panel</h1>
+<div class="header">
+
+  <h1>🏜️ Dal Baati Special</h1>
+
+  <p>📅 Table Booking Admin Panel</p>
+
+</div>
+
+
+<div class="stats">
+
+  <div class="stat">
+    <h2 id="totalBookings">0</h2>
+    <p>Total Bookings</p>
+  </div>
+
+  <div class="stat">
+    <h2 id="pendingBookings">0</h2>
+    <p>Pending</p>
+  </div>
+
+  <div class="stat">
+    <h2 id="confirmedBookings">0</h2>
+    <p>Confirmed</p>
+  </div>
+
+</div>
+
+
+<div id="bookings">
+
+  <div class="loading">
+    ⏳ Loading bookings...
+  </div>
+
+</div>
+
+
 <audio id="bell" preload="auto">
   <source src="ding.mp3" type="audio/mpeg">
 </audio>
 
-<div id="orders"></div>
 
 <script type="module">
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 
 import {
   getFirestore,
   collection,
-  getDocs,
+  onSnapshot,
   updateDoc,
   doc
-}
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+
+/* FIREBASE */
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDz17AZWhfnOnO-DbC4CYWsoTAv4ojgyRE",
-  authDomain: "niks-ordering-system.firebaseapp.com",
-  projectId: "niks-ordering-system",
-  storageBucket: "niks-ordering-system.firebasestorage.app",
-  messagingSenderId: "486739954103",
-  appId: "1:486739954103:web:5a9818c0c117b319f78032"
+
+  apiKey:
+    "AIzaSyDz17AZWhfnO-DbC4CYWsoTAv4ojgyRE",
+
+  authDomain:
+    "niks-ordering-system.firebaseapp.com",
+
+  projectId:
+    "niks-ordering-system",
+
+  storageBucket:
+    "niks-ordering-system.firebasestorage.app",
+
+  messagingSenderId:
+    "486739954103",
+
+  appId:
+    "1:486739954103:web:5271bb5f38cd8e89f78032",
+
+  measurementId:
+    "G-1FZ1RNZT6B"
+
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-let latestOrderId = "";
-async function loadOrders() {
 
-  try {
+const app =
+  initializeApp(firebaseConfig);
 
-    const snapshot = await getDocs(
-      collection(db, "orders")
-    );
-const docs = snapshot.docs.sort((a, b) => {
-  const timeA = a.data().createdAt || "";
-  const timeB = b.data().createdAt || "";
-  return timeB.localeCompare(timeA);
-});
+const db =
+  getFirestore(app);
 
-if (docs.length > 0) {
 
-  const newestOrderId = docs[0].id;
+/* VARIABLES */
 
-  if (
-    latestOrderId &&
-    newestOrderId !== latestOrderId
-  ) {
-  
+let firstLoad = true;
+let previousBookingIds = new Set();
+
+
+/* LISTEN FOR BOOKINGS */
+
+onSnapshot(
+  collection(db,"bookings"),
+  (snapshot) => {
+
+    const bookings = [];
+
+    snapshot.forEach((docSnap) => {
+
+      bookings.push({
+        id:docSnap.id,
+        ...docSnap.data()
+      });
+
+    });
+
+
+    /* SORT NEWEST FIRST */
+
+    bookings.sort((a,b) => {
+
+      const dateA =
+        `${a.date || ""} ${a.time || ""}`;
+
+      const dateB =
+        `${b.date || ""} ${b.time || ""}`;
+
+      return dateB.localeCompare(dateA);
+
+    });
+
+
+    /* NEW BOOKING NOTIFICATION */
+
+    const currentIds =
+      new Set(bookings.map(b => b.id));
+
+
+    if(!firstLoad){
+
+      const newBooking =
+        bookings.some(
+          booking =>
+            !previousBookingIds.has(booking.id)
+        );
+
+
+      if(newBooking){
+
+        const bell =
+          document.getElementById("bell");
+
+        bell.currentTime = 0;
+
+        bell.play().catch(() => {});
+
+      }
+
+    }
+
+
+    previousBookingIds =
+      currentIds;
+
+    firstLoad = false;
+
+
+    renderBookings(bookings);
+
+  },
+  (error) => {
+
+    console.error(error);
+
+    document.getElementById("bookings").innerHTML = `
+
+      <div class="empty">
+
+        ❌ Unable to load bookings.
+
+        <br><br>
+
+        ${error.message}
+
+      </div>
+
+    `;
+
+  }
+);
+
+
+/* RENDER */
+
+function renderBookings(bookings){
+
+  const container =
+    document.getElementById("bookings");
+
+
+  const total =
+    bookings.length;
+
+
+  const pending =
+    bookings.filter(
+      b => (b.status || "pending").toLowerCase()
+      === "pending"
+    ).length;
+
+
+  const confirmed =
+    bookings.filter(
+      b => (b.status || "").toLowerCase()
+      === "confirmed"
+    ).length;
+
+
+  document.getElementById(
+    "totalBookings"
+  ).innerText = total;
+
+
+  document.getElementById(
+    "pendingBookings"
+  ).innerText = pending;
+
+
+  document.getElementById(
+    "confirmedBookings"
+  ).innerText = confirmed;
+
+
+  if(bookings.length === 0){
+
+    container.innerHTML = `
+
+      <div class="empty">
+
+        📅 No table bookings yet.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML = "";
+
+
+  bookings.forEach((booking) => {
+
+    const status =
+      (booking.status || "pending")
+      .toLowerCase();
+
+
+    const card =
+      document.createElement("div");
+
+    card.className =
+      `booking ${status}`;
+
+
+    const name =
+      booking.name || "Unknown";
+
+
+    const phone =
+      booking.phone || "-";
+
+
+    const people =
+      booking.people || "-";
+
+
+    const date =
+      booking.date || "-";
+
+
+    const time =
+      booking.time || "-";
+
+
+    const specialRequest =
+      booking.specialRequest || "No special request";
+
+
+    card.innerHTML = `
+
+      <div class="booking-header">
+
+        <h3>
+          👤 ${escapeHTML(name)}
+        </h3>
+
+        <span class="status ${status}">
+          ${status.toUpperCase()}
+        </span>
+
+      </div>
+
+
+      <div class="details">
+
+        <div class="detail">
+
+          <strong>📅 Date</strong>
+
+          ${escapeHTML(date)}
+
+        </div>
+
+
+        <div class="detail">
+
+          <strong>⏰ Time</strong>
+
+          ${escapeHTML(time)}
+
+        </div>
+
+
+        <div class="detail">
+
+          <strong>👥 People</strong>
+
+          ${escapeHTML(String(people))}
+
+        </div>
+
+
+        <div class="detail">
+
+          <strong>📱 Phone</strong>
+
+          ${escapeHTML(phone)}
+
+        </div>
+
+      </div>
+
+
+      <div class="special">
+
+        <strong>📝 Special Request</strong>
+
+        <br><br>
+
+        ${escapeHTML(specialRequest)}
+
+      </div>
+
+
+      <div class="actions">
+
+        ${
+          status !== "confirmed"
+          ? `
+            <button
+              class="confirm"
+              onclick="changeStatus('${booking.id}','confirmed')">
+
+              ✅ Confirm
+
+            </button>
+          `
+          : ""
+        }
+
+
+        ${
+          status !== "cancelled"
+          ? `
+            <button
+              class="cancel"
+              onclick="changeStatus('${booking.id}','cancelled')">
+
+              ❌ Cancel
+
+            </button>
+          `
+          : ""
+        }
+
+
+        ${
+          phone !== "-"
+          ? `
+            <a
+              class="action-link call"
+              href="tel:${phone}">
+
+              📞 Call
+
+            </a>
+
+            <a
+              class="action-link whatsapp"
+              target="_blank"
+              href="https://wa.me/91${phone}?text=${encodeURIComponent(
+                "Hello " + name +
+                ", your table booking at Dal Baati Special has been received."
+              )}">
+
+              💬 WhatsApp
+
+            </a>
+          `
+          : ""
+        }
+
+      </div>
+
+    `;
+
+
+    container.appendChild(card);
+
+  });
+
+}
+
+
+/* UPDATE STATUS */
+
+window.changeStatus =
+  async function(bookingId,newStatus){
+
+    try{
+
+      await updateDoc(
+        doc(db,"bookings",bookingId),
+        {
+          status:newStatus
+        }
+      );
+
+    }
+
+    catch(error){
+
+      console.error(error);
+
+      alert(
+        "❌ Could not update booking: " +
+        error.message
+      );
+
+    }
+
+  };
+
+
+/* BASIC HTML SAFETY */
+
+function escapeHTML(value){
+
+  return String(value)
+
+    .replaceAll("&","&amp;")
+
+    .replaceAll("<","&lt;")
+
+    .replaceAll(">","&gt;")
+
+    .replaceAll('"',"&quot;")
+
+    .replaceAll("'","&#039;");
+
+}
+
+
+/* ENABLE AUDIO AFTER USER INTERACTION */
+
+document.addEventListener(
+  "click",
+  () => {
 
     const bell =
       document.getElementById("bell");
 
-    bell.currentTime = 0;
+    bell.play()
+      .then(() => {
 
-    bell.play().catch(err =>
-      console.log(err)
-    );
+        bell.pause();
 
-  }
+        bell.currentTime = 0;
 
-  latestOrderId = newestOrderId;
-}
-    const container =
-      document.getElementById("orders");
+      })
+      .catch(() => {});
 
-    container.innerHTML = "";
+  },
+  {once:true}
+);
 
-
-docs.forEach((docSnap) => {
-
-      const order = docSnap.data();
-
-      // Hide served orders
-      if (order.status === "Served") {
-        return;
-      }
-
-      container.innerHTML += `
-      <div class="order">
-
-        <h3>👤 ${order.customerName || "Unknown"}</h3>
-
-        <p>🍽️ Table ${order.tableNumber || "-"}</p>
-
-        <pre class="orderText">
-${order.orderText || ""}
-        </pre>
-
-        <p class="status ${order.status}">
-          <b>Status:</b> ${order.status}
-        </p>
-
-        <button onclick="updateStatus('${docSnap.id}','Preparing')">
-          👨‍🍳 Preparing
-        </button>
-
-        <button onclick="updateStatus('${docSnap.id}','Served')">
-          ✅ Served
-        </button>
-
-      </div>
-      `;
-
-    });
-
-  } catch (error) {
-
-    console.error(error);
-    alert("Error: " + error.message);
-
-  }
-
-}
-
-window.updateStatus = async function(orderId, newStatus){
-
-  try {
-
-    await updateDoc(
-      doc(db, "orders", orderId),
-      {
-        status: newStatus
-      }
-    );
-
-    loadOrders();
-
-  } catch(error){
-
-    alert(error.message);
-
-  }
-
-}
-
-loadOrders();
-
-setInterval(() => {
-    loadOrders();
-}, 3000);
-document.addEventListener("click", () => {
-  const bell = document.getElementById("bell");
-  bell.play().then(() => {
-    bell.pause();
-    bell.currentTime = 0;
-  }).catch(() => {});
-}, { once: true });
 </script>
 
 </body>
