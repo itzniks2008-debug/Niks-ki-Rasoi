@@ -692,33 +692,19 @@ footer strong{
         </div>
 
 
-        <div class="form-group">
+        <div class="form-group full">
 
-          <label for="date">
-            📅 Date
-          </label>
+  <div class="booking-note">
 
-          <input
-            type="date"
-            id="date"
-            required>
+    🇮🇳 <strong>Booking Time:</strong>
+    7:30 PM – 11:00 PM
 
-        </div>
+    <br><br>
 
+    📅 Date and ⏰ time will be automatically recorded
+    when you submit your booking.
 
-        <div class="form-group">
-
-          <label for="time">
-            ⏰ Time
-          </label>
-
-          <input
-            type="time"
-            id="time"
-            min="19:30"
-            max="23:00"
-            step="1800"
-            required>
+  </div>
 
         </div>
 
@@ -936,26 +922,8 @@ const app =
 const db =
   getFirestore(app);
 
-
-/* DATE SETUP */
-
-const dateInput =
-  document.getElementById("date");
-
-const today =
-  new Date();
-
-const localDate =
-  today.getFullYear() +
-  "-" +
-  String(today.getMonth()+1).padStart(2,"0") +
-  "-" +
-  String(today.getDate()).padStart(2,"0");
-
-dateInput.min = localDate;
-
-
-/* BOOKING FORM */
+const bookingButton =
+  document.getElementById("bookingButton");
 
 const bookingForm =
   document.getElementById("bookingForm");
@@ -976,15 +944,64 @@ bookingForm.addEventListener(
     const people =
       document.getElementById("people").value;
 
-    const date =
-      document.getElementById("date").value;
-
-    const time =
-      document.getElementById("time").value;
-
     const specialRequest =
       document.getElementById("specialRequest").value.trim();
+/* AUTOMATIC INDIA DATE + TIME */
 
+const now = new Date();
+
+const indiaDate =
+  new Intl.DateTimeFormat(
+    "en-CA",
+    {
+      timeZone: "Asia/Kolkata",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit"
+    }
+  ).format(now);
+
+
+const indiaTime =
+  new Intl.DateTimeFormat(
+    "en-GB",
+    {
+      timeZone: "Asia/Kolkata",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false
+    }
+  ).format(now);
+
+
+/* BOOKING HOURS: 7:30 PM - 11:00 PM */
+
+const [hour, minute] =
+  indiaTime.split(":").map(Number);
+
+const currentMinutes =
+  hour * 60 + minute;
+
+const openingTime =
+  19 * 60 + 30;
+
+const closingTime =
+  23 * 60;
+
+
+if(
+  currentMinutes < openingTime ||
+  currentMinutes > closingTime
+){
+
+  showMessage(
+    "⏰ Online bookings are available only from 7:30 PM to 11:00 PM.",
+    false
+  );
+
+  return;
+
+}
 
     /* PHONE VALIDATION */
 
@@ -998,21 +1015,6 @@ bookingForm.addEventListener(
       return;
 
     }
-
-
-    /* TIME VALIDATION */
-
-    if(time < "19:30" || time > "23:00"){
-
-      showMessage(
-        "❌ Booking time must be between 7:30 PM and 11:00 PM.",
-        false
-      );
-
-      return;
-
-    }
-
 
     const bookingButton =
       document.getElementById("bookingButton");
@@ -1035,9 +1037,9 @@ bookingForm.addEventListener(
 
           people: people,
 
-          date: date,
+          date: indiaDate,
 
-          time: time,
+          time: indiaTime,
 
           specialRequest:
             specialRequest || "",
