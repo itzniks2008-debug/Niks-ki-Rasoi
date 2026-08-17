@@ -394,8 +394,21 @@ footer strong{
   }
 
   .nav-links{
-    display:none;
-  }
+  display:flex;
+  gap:12px;
+  overflow-x:auto;
+  white-space:nowrap;
+  max-width:55%;
+  scrollbar-width:none;
+}
+
+.nav-links::-webkit-scrollbar{
+  display:none;
+}
+
+.nav-links a{
+  font-size:12px;
+}
 
   .phone{
     font-size:13px;
