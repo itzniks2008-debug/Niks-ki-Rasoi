@@ -854,6 +854,91 @@ a.btn.btn-whatsapp,
 .booking-wrapper {
     position: relative;
 }
+
+/* ================================
+   RAJASTHANI ROYAL THEME
+   ================================ */
+
+/* Traditional decorative feel */
+section {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Rajasthani-style diamond decorations */
+section::before {
+    content: "◆   ◆   ◆";
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #d9a441;
+    font-size: 16px;
+    letter-spacing: 6px;
+    opacity: 0.65;
+    pointer-events: none;
+}
+
+/* Cream sections */
+.special,
+.booking-section {
+    background-color: #fff5df;
+}
+
+/* Royal headings */
+.section-title h2 {
+    font-family: Georgia, "Times New Roman", serif;
+    color: #65170f;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* Gold decorative borders */
+.special-card,
+.booking-wrapper {
+    border: 2px solid #d9a441;
+}
+
+/* Traditional gold buttons */
+.btn-gold {
+    background: linear-gradient(135deg, #f4c65d, #d9a441);
+    color: #4b160f;
+    border: 2px solid #b98220;
+    box-shadow: 0 4px 10px rgba(75,22,15,0.25);
+}
+
+.btn-gold:hover {
+    background: linear-gradient(135deg, #ffe08a, #f4c65d);
+    transform: translateY(-2px);
+}
+
+/* Royal footer */
+footer {
+    background: linear-gradient(135deg, #4b0f0b, #65170f);
+    border-top: 3px solid #d9a441;
+}
+
+/* Gold footer heading */
+footer strong {
+    color: #f4c65d;
+}
+
+/* Rajasthani-inspired text */
+.hero-small {
+    color: #f4c65d;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* Elegant hero heading */
+.hero h1 {
+    text-shadow: 2px 3px 8px rgba(0,0,0,0.55);
+}
+
+/* Subtle royal glow */
+.logo {
+    text-shadow: 1px 2px 5px rgba(217,164,65,0.25);
+}
   
 </style>
 </head>
