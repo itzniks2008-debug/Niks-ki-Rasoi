@@ -813,7 +813,9 @@ function renderBookings(
       card.innerHTML = `
 
         <div class="booking-header">
-
+        <div class="booking-number">
+        🔢 Booking #${escapeHTML(String(booking.bookingNumber || "-"))}
+        </div>
           <h3>
 
             👤
@@ -871,22 +873,7 @@ function renderBookings(
 
           </div>
 
-
-          <div class="detail">
-
-            <strong>
-              📱 Phone
-            </strong>
-
-            ${escapeHTML(phone)}
-
-          </div>
-
-
-        </div>
-
-
-        <div class="special">
+         <div class="special">
 
           <strong>
             📝 Special Request
