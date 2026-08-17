@@ -577,6 +577,175 @@ footer strong{
   }
 
 }
+
+/* ================================
+   RAJASTHANI ROYAL THEME
+   ================================ */
+
+:root {
+    --raj-maroon: #6b160f;
+    --raj-dark: #3b0b08;
+    --raj-gold: #d9a441;
+    --raj-light-gold: #f4c65d;
+    --raj-cream: #fff4dc;
+    --raj-brown: #542019;
+}
+
+/* Main background */
+body {
+    background:
+        radial-gradient(circle at 20% 20%, rgba(217,164,65,0.08) 0 2px, transparent 3px),
+        radial-gradient(circle at 80% 70%, rgba(217,164,65,0.07) 0 2px, transparent 3px),
+        var(--raj-cream);
+    background-size: 45px 45px, 55px 55px;
+    color: var(--raj-brown);
+}
+
+/* Header */
+header {
+    background: linear-gradient(
+        135deg,
+        #4a0d09,
+        #721b12,
+        #4a0d09
+    );
+    border-bottom: 3px solid var(--raj-gold);
+}
+
+/* Navigation */
+nav a {
+    color: #fff4dc !important;
+    transition: 0.3s ease;
+}
+
+nav a:hover {
+    color: var(--raj-light-gold) !important;
+}
+
+/* Section titles */
+.section-title h2 {
+    color: var(--raj-maroon);
+    text-shadow: 1px 1px 0 rgba(217,164,65,0.25);
+}
+
+/* Decorative line under section headings */
+.section-title::after {
+    content: "◆ ◆ ◆";
+    display: block;
+    color: var(--raj-gold);
+    font-size: 13px;
+    letter-spacing: 7px;
+    margin-top: 10px;
+}
+
+/* Main cards */
+.special-card,
+.reel,
+.booking-wrapper,
+.qr-box {
+    border: 2px solid var(--raj-gold) !important;
+    box-shadow: 0 8px 25px rgba(59,11,8,0.15);
+}
+
+/* Card headings */
+.special-card h3,
+.reel h3 {
+    color: var(--raj-maroon) !important;
+}
+
+/* Buttons */
+.btn,
+button,
+.btn-gold {
+    background: linear-gradient(
+        135deg,
+        #f4c65d,
+        #d9a441
+    ) !important;
+
+    color: #4a0d09 !important;
+    border: 2px solid #b98220 !important;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(59,11,8,0.2);
+}
+
+.btn:hover,
+button:hover,
+.btn-gold:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 15px rgba(59,11,8,0.25);
+}
+
+/* Booking form */
+.booking-wrapper {
+    background: #fffdf7;
+    border-radius: 22px;
+}
+
+/* Form labels */
+.form-group label {
+    color: var(--raj-maroon);
+}
+
+/* Inputs */
+input,
+select,
+textarea {
+    border: 1.5px solid #d9b86c !important;
+    background: #fffdf8 !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--raj-gold) !important;
+    box-shadow: 0 0 0 3px rgba(217,164,65,0.15) !important;
+}
+
+/* Booking information boxes */
+.booking-note {
+    background: #fff1cf !important;
+    border-left: 5px solid var(--raj-gold) !important;
+}
+
+/* Footer */
+footer {
+    background: linear-gradient(
+        135deg,
+        #3b0b08,
+        #64150f,
+        #3b0b08
+    ) !important;
+
+    border-top: 3px solid var(--raj-gold);
+    color: #fff4dc;
+}
+
+/* Subtle royal decorative effect */
+section {
+    position: relative;
+}
+
+section::before {
+    content: "✦";
+    position: absolute;
+    top: 18px;
+    left: 25px;
+    color: rgba(217,164,65,0.25);
+    font-size: 22px;
+    pointer-events: none;
+}
+
+section::after {
+    content: "✦";
+    position: absolute;
+    bottom: 18px;
+    right: 25px;
+    color: rgba(217,164,65,0.25);
+    font-size: 22px;
+    pointer-events: none;
+}
+
   
 </style>
 </head>
