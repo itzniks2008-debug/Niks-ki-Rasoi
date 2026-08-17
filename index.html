@@ -473,6 +473,119 @@ footer strong{
     margin-bottom:10px;
   }
 }
+
+/* PREMIUM INSTAGRAM EXPERIENCE */
+
+.instagram-box{
+  max-width:1100px;
+  margin:40px auto 0;
+  text-align:center;
+}
+
+.instagram-box h2{
+  color:#f4c65d;
+  font-size:34px;
+  margin-bottom:10px;
+}
+
+.instagram-box > p{
+  color:#eadcc0;
+  font-size:17px;
+  margin-bottom:35px;
+}
+
+.reel-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:25px;
+}
+
+.reel-card{
+  background:#2c0907;
+  border:1px solid #d9a441;
+  border-radius:20px;
+  overflow:hidden;
+  box-shadow:0 12px 30px rgba(0,0,0,.25);
+  transition:transform .3s ease, box-shadow .3s ease;
+}
+
+.reel-card:hover{
+  transform:translateY(-8px);
+  box-shadow:0 18px 40px rgba(0,0,0,.4);
+}
+
+.reel-card img{
+  width:100%;
+  height:250px;
+  object-fit:cover;
+  display:block;
+}
+
+.reel-content{
+  padding:22px;
+  text-align:center;
+}
+
+.reel-content span{
+  color:#f4c65d;
+  font-size:12px;
+  font-weight:bold;
+  letter-spacing:1.5px;
+}
+
+.reel-content h3{
+  color:#fff2cf;
+  font-size:24px;
+  margin:10px 0;
+}
+
+.reel-content p{
+  color:#eadcc0;
+  font-size:15px;
+  line-height:1.6;
+  margin-bottom:20px;
+}
+
+.reel-btn{
+  display:inline-block;
+  background:#f4c65d;
+  color:#4b160f;
+  text-decoration:none;
+  padding:11px 20px;
+  border-radius:25px;
+  font-weight:bold;
+  transition:.3s;
+}
+
+.reel-btn:hover{
+  background:#fff2cf;
+  transform:scale(1.04);
+}
+
+.instagram-follow{
+  margin-top:35px;
+}
+
+
+/* MOBILE */
+
+@media(max-width:800px){
+
+  .reel-grid{
+    grid-template-columns:1fr;
+    gap:20px;
+  }
+
+  .instagram-box h2{
+    font-size:28px;
+  }
+
+  .reel-card img{
+    height:230px;
+  }
+
+}
+  
 </style>
 </head>
 
@@ -590,24 +703,117 @@ footer strong{
     </p>
   </div>
 
-  <!-- INSTAGRAM -->
-  <div class="instagram-box">
+  <!-- INSTAGRAM EXPERIENCE -->
+<div class="instagram-box">
 
-    <h2>📸 Follow Us on Instagram</h2>
+  <h2>📸 Experience Us on Instagram</h2>
 
-    <p>
-      Watch our latest reels, food moments and
-      customer experiences.
-    </p>
+  <p>
+    Discover our food, ambience and authentic Rajasthani experience.
+  </p>
 
-    <a
-      href="https://www.instagram.com/shreebrahmani_dalbati/"
-      target="_blank"
-      class="btn btn-gold">
-      📸 Follow @shreebrahmani_dalbati
-    </a>
+  <div class="reel-grid">
+
+    <!-- REEL 1 -->
+    <div class="reel-card">
+
+      <img
+        src="images/restaurant.jpg"
+        alt="Brahmani Dal Baati Restaurant">
+
+      <div class="reel-content">
+
+        <span>🎬 INSTAGRAM REEL</span>
+
+        <h3>Our Restaurant</h3>
+
+        <p>
+          Step inside Brahmani Dal Baati and experience
+          our authentic Rajasthani atmosphere.
+        </p>
+
+        <a
+          href="https://www.instagram.com/reel/Db-HMYBAg0Z/"
+          target="_blank"
+          class="reel-btn">
+          ▶ Watch Reel
+        </a>
+
+      </div>
+
+    </div>
+
+
+    <!-- REEL 2 -->
+    <div class="reel-card">
+
+      <img
+        src="images/dal-baati.jpg"
+        alt="Dal Baati">
+
+      <div class="reel-content">
+
+        <span>🍛 INSTAGRAM REEL</span>
+
+        <h3>Authentic Dal Baati</h3>
+
+        <p>
+          Taste the traditional flavours that make
+          Brahmani Dal Baati special.
+        </p>
+
+        <a
+          href="https://www.instagram.com/reel/DbtQtTUzFNC/"
+          target="_blank"
+          class="reel-btn">
+          ▶ Watch Reel
+        </a>
+
+      </div>
+
+    </div>
+
+
+    <!-- REEL 3 -->
+    <div class="reel-card">
+
+      <img
+        src="images/restaurant-interior.jpg"
+        alt="Restaurant Interior">
+
+      <div class="reel-content">
+
+        <span>✨ INSTAGRAM REEL</span>
+
+        <h3>Your Experience</h3>
+
+        <p>
+          Enjoy great food, beautiful ambience and
+          a memorable Rajasthani experience.
+        </p>
+
+        <a
+          href="https://www.instagram.com/reel/DbqnnENJrMP/"
+          target="_blank"
+          class="reel-btn">
+          ▶ Watch Reel
+        </a>
+
+      </div>
+
+    </div>
 
   </div>
+
+
+  <a
+    href="https://www.instagram.com/shreebrahmani_dalbati/"
+    target="_blank"
+    class="btn btn-gold instagram-follow">
+    📸 Follow Us on Instagram
+  </a>
+
+</div>
 
 
   <!-- INSTAGRAM REELS -->
