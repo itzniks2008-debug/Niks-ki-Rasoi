@@ -84,7 +84,7 @@ input:focus{
 }
 
 .password-box input{
-  padding-right:75px;
+  padding-right:85px;
 }
 
 .show-btn{
@@ -97,6 +97,11 @@ input:focus{
   border:none;
   border-radius:7px;
   cursor:pointer;
+  font-size:14px;
+}
+
+.show-btn:active{
+  transform:scale(.97);
 }
 
 .login-btn{
@@ -113,6 +118,10 @@ input:focus{
 
 .login-btn:hover{
   background:#56100b;
+}
+
+.login-btn:active{
+  transform:scale(.99);
 }
 
 .login-btn:disabled{
@@ -143,7 +152,6 @@ input:focus{
 
 
 <body>
-
 
 <div class="login-box">
 
@@ -187,8 +195,8 @@ input:focus{
 
     <button
       type="button"
-      class="show-btn"
-      onclick="togglePassword()">
+      id="showPasswordBtn"
+      class="show-btn">
 
       Show
 
@@ -198,10 +206,9 @@ input:focus{
 
 
   <button
-  type="button"
-  id="loginBtn"
-  class="login-btn"
-  onclick="login()">
+    type="button"
+    id="loginBtn"
+    class="login-btn">
 
     🔐 Login to Dashboard
 
@@ -218,24 +225,28 @@ input:focus{
 
 <script type="module">
 
+/* ================================
+   FIREBASE IMPORTS
+================================ */
+
 import {
   initializeApp
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 
 import {
   getAuth,
-  setPersistence,
-  browserLocalPersistence,
   signInWithEmailAndPassword
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 
-/* FIREBASE CONFIG */
+/* ================================
+   FIREBASE CONFIG
+================================ */
 
 const firebaseConfig = {
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDz17AZWhfnOnO-DbC4CYWsoTAv4ojgyRE",
+  apiKey:
+    "AIzaSyDz17AZWhfnOnO-DbC4CYWsoTAv4ojgyRE",
 
   authDomain:
     "niks-ordering-system.firebaseapp.com",
@@ -250,13 +261,17 @@ const firebaseConfig = {
     "486739954103",
 
   appId:
-    "1:486739954103:web:5271bb5f38cd8e89f78032",
+    "1:486739954103:web:5a9818c0c117b319f78032",
 
   measurementId:
-    "G-1FZ1RNZT6B"
+    "G-92VL3H2VTL"
 
 };
 
+
+/* ================================
+   INITIALIZE FIREBASE
+================================ */
 
 const app =
   initializeApp(firebaseConfig);
@@ -265,41 +280,93 @@ const auth =
   getAuth(app);
 
 
-/* LOGIN */
+/* ================================
+   GET HTML ELEMENTS
+================================ */
 
-window.login = async function(){
-alert("LOGIN FUNCTION IS WORKING");
+const emailInput =
+  document.getElementById("email");
+
+const passwordInput =
+  document.getElementById("password");
+
+const errorBox =
+  document.getElementById("error");
+
+const loginBtn =
+  document.getElementById("loginBtn");
+
+const showPasswordBtn =
+  document.getElementById("showPasswordBtn");
+
+
+/* ================================
+   SHOW / HIDE PASSWORD
+================================ */
+
+showPasswordBtn.addEventListener(
+  "click",
+  function(){
+
+    if(passwordInput.type === "password"){
+
+      passwordInput.type = "text";
+
+      showPasswordBtn.innerText =
+        "Hide";
+
+    }
+    else{
+
+      passwordInput.type = "password";
+
+      showPasswordBtn.innerText =
+        "Show";
+
+    }
+
+  }
+);
+
+
+/* ================================
+   LOGIN FUNCTION
+================================ */
+
+async function login(){
+
   const email =
-    document.getElementById("email")
-    .value.trim();
+    emailInput.value.trim();
 
   const password =
-    document.getElementById("password")
-    .value;
-
-  const errorBox =
-    document.getElementById("error");
-
-  const loginBtn =
-    document.getElementById("loginBtn");
+    passwordInput.value;
 
 
-  errorBox.style.display = "none";
+  /* CLEAR PREVIOUS ERROR */
 
+  errorBox.style.display =
+    "none";
+
+
+  /* CHECK EMPTY FIELDS */
 
   if(email === "" || password === ""){
 
     errorBox.innerText =
       "Please enter email and password.";
 
-    errorBox.style.display = "block";
+    errorBox.style.display =
+      "block";
 
     return;
 
   }
 
 
-  loginBtn.disabled = true;
+  /* DISABLE LOGIN BUTTON */
+
+  loginBtn.disabled =
+    true;
 
   loginBtn.innerText =
     "⏳ Logging in...";
@@ -307,75 +374,66 @@ alert("LOGIN FUNCTION IS WORKING");
 
   try{
 
-    await setPersistence(
-  auth,
-  browserLocalPersistence
-);
+    /* FIREBASE LOGIN */
 
-await signInWithEmailAndPassword(
-  auth,
-  email,
-  password
-);
+    await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
 
-/* LOGIN SUCCESS */
 
-window.location.replace(
-  "admin.html"
-);
+    /* LOGIN SUCCESS */
+
+    window.location.href =
+      "admin.html";
 
   }
 
+
   catch(error){
 
-    console.error(error);
+    console.error(
+      "Firebase Login Error:",
+      error
+    );
+
+
+    /* LOGIN FAILED */
 
     errorBox.innerText =
-  "❌ " + error.code + ": " + error.message;
+      "❌ Invalid email or password.";
 
     errorBox.style.display =
       "block";
 
-    loginBtn.disabled = false;
+
+    /* ENABLE BUTTON AGAIN */
+
+    loginBtn.disabled =
+      false;
 
     loginBtn.innerText =
       "🔐 Login to Dashboard";
 
   }
 
-};
+}
 
 
-/* SHOW / HIDE PASSWORD */
+/* ================================
+   LOGIN BUTTON CLICK
+================================ */
 
-window.togglePassword = function(){
-
-  const password =
-    document.getElementById("password");
-
-  const button =
-    document.querySelector(".show-btn");
-
-
-  if(password.type === "password"){
-
-    password.type = "text";
-
-    button.innerText = "Hide";
-
-  }
-  else{
-
-    password.type = "password";
-
-    button.innerText = "Show";
-
-  }
-
-};
+loginBtn.addEventListener(
+  "click",
+  login
+);
 
 
-/* ENTER KEY LOGIN */
+/* ================================
+   ENTER KEY LOGIN
+================================ */
 
 document.addEventListener(
   "keydown",
