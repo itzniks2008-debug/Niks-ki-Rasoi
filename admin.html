@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Dal Baati Special | Booking Admin</title>
@@ -185,6 +188,13 @@ button,
   color:white;
 }
 
+.logout{
+  margin-top:20px;
+  background:#64170f;
+  color:white;
+  width:100%;
+}
+
 .empty{
   background:white;
   padding:40px;
@@ -197,6 +207,13 @@ button,
   text-align:center;
   padding:30px;
   color:#777;
+}
+
+.admin-info{
+  text-align:center;
+  color:#777;
+  margin-top:10px;
+  font-size:13px;
 }
 
 @media(max-width:700px){
@@ -227,9 +244,12 @@ button,
 }
 
 </style>
+
 </head>
 
+
 <body>
+
 
 <div class="header">
 
@@ -237,24 +257,43 @@ button,
 
   <p>📅 Table Booking Admin Panel</p>
 
+  <div
+    id="adminInfo"
+    class="admin-info">
+
+    Checking authentication...
+
+  </div>
+
 </div>
 
 
 <div class="stats">
 
   <div class="stat">
+
     <h2 id="totalBookings">0</h2>
+
     <p>Total Bookings</p>
+
   </div>
 
+
   <div class="stat">
+
     <h2 id="pendingBookings">0</h2>
+
     <p>Pending</p>
+
   </div>
 
+
   <div class="stat">
+
     <h2 id="confirmedBookings">0</h2>
+
     <p>Confirmed</p>
+
   </div>
 
 </div>
@@ -263,26 +302,54 @@ button,
 <div id="bookings">
 
   <div class="loading">
-    ⏳ Loading bookings...
+
+    🔐 Checking admin login...
+
   </div>
 
 </div>
 
 
-<audio id="bell" preload="auto">
-  <source src="ding.mp3" type="audio/mpeg">
+<audio
+  id="bell"
+  preload="auto">
+
+  <source
+    src="ding.mp3"
+    type="audio/mpeg">
+
 </audio>
 
 
+<button
+  id="logoutBtn"
+  class="logout">
+
+  🔓 Logout
+
+</button>
+
+
 <script type="module">
+
+
+/* ================================
+   FIREBASE IMPORTS
+================================ */
+
+import {
+  initializeApp
+} from
+"https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
+
 import {
   getAuth,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+  onAuthStateChanged,
+  signOut
+} from
+"https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
-  import {
-  initializeApp
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 
 import {
   getFirestore,
@@ -290,10 +357,13 @@ import {
   onSnapshot,
   updateDoc,
   doc
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+} from
+"https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 
-/* FIREBASE */
+/* ================================
+   FIREBASE CONFIG
+================================ */
 
 const firebaseConfig = {
 
@@ -321,177 +391,359 @@ const firebaseConfig = {
 };
 
 
+/* ================================
+   INITIALIZE FIREBASE
+================================ */
+
 const app =
   initializeApp(firebaseConfig);
+
+
+const auth =
+  getAuth(app);
+
 
 const db =
   getFirestore(app);
 
-const auth = getAuth(app);
 
-onAuthStateChanged(auth, (user) => {
-
-  if (!user) {
-    window.location.href = "admin-login.html";
-    return;
-  }
-
-  console.log("Admin authenticated:", user.email);
-
-});
-
-/* VARIABLES */
+/* ================================
+   VARIABLES
+================================ */
 
 let firstLoad = true;
-let previousBookingIds = new Set();
+
+let previousBookingIds =
+  new Set();
+
+let unsubscribeBookings = null;
 
 
-/* LISTEN FOR BOOKINGS */
+/* ================================
+   AUTHENTICATION
+================================ */
 
-onSnapshot(
-  collection(db,"bookings"),
-  (snapshot) => {
+onAuthStateChanged(
+  auth,
+  (user) => {
 
-    const bookings = [];
-
-    snapshot.forEach((docSnap) => {
-
-      bookings.push({
-        id:docSnap.id,
-        ...docSnap.data()
-      });
-
-    });
+    console.log(
+      "Firebase auth state:",
+      user
+    );
 
 
-    /* SORT NEWEST FIRST */
+    /* USER NOT LOGGED IN */
 
-    bookings.sort((a,b) => {
+    if(!user){
 
-      const dateA =
-        `${a.date || ""} ${a.time || ""}`;
-
-      const dateB =
-        `${b.date || ""} ${b.time || ""}`;
-
-      return dateB.localeCompare(dateA);
-
-    });
+      document.getElementById(
+        "adminInfo"
+      ).innerText =
+        "Not authenticated";
 
 
-    /* NEW BOOKING NOTIFICATION */
+      document.getElementById(
+        "bookings"
+      ).innerHTML = `
 
-    const currentIds =
-      new Set(bookings.map(b => b.id));
+        <div class="empty">
+
+          🔐 Login required.
+
+          <br><br>
+
+          Redirecting to login...
+
+        </div>
+
+      `;
 
 
-    if(!firstLoad){
+      setTimeout(() => {
 
-      const newBooking =
-        bookings.some(
-          booking =>
-            !previousBookingIds.has(booking.id)
+        window.location.replace(
+          "admin-login.html"
         );
 
+      },1000);
 
-      if(newBooking){
 
-        const bell =
-          document.getElementById("bell");
-
-        bell.currentTime = 0;
-
-        bell.play().catch(() => {});
-
-      }
+      return;
 
     }
 
 
-    previousBookingIds =
-      currentIds;
+    /* USER IS LOGGED IN */
 
-    firstLoad = false;
+    console.log(
+      "Admin authenticated:",
+      user.email
+    );
 
 
-    renderBookings(bookings);
+    document.getElementById(
+      "adminInfo"
+    ).innerText =
+      "Logged in as: " + user.email;
 
-  },
-  (error) => {
 
-    console.error(error);
+    /* START FIRESTORE ONLY
+       AFTER AUTHENTICATION */
 
-    document.getElementById("bookings").innerHTML = `
-
-      <div class="empty">
-
-        ❌ Unable to load bookings.
-
-        <br><br>
-
-        ${error.message}
-
-      </div>
-
-    `;
+    startBookingListener();
 
   }
 );
 
 
-/* RENDER */
+/* ================================
+   BOOKING LISTENER
+================================ */
 
-function renderBookings(bookings){
+function startBookingListener(){
+
+
+  /* Prevent duplicate listener */
+
+  if(unsubscribeBookings){
+
+    unsubscribeBookings();
+
+  }
+
+
+  unsubscribeBookings =
+    onSnapshot(
+
+      collection(
+        db,
+        "bookings"
+      ),
+
+
+      (snapshot) => {
+
+
+        const bookings = [];
+
+
+        snapshot.forEach(
+          (docSnap) => {
+
+            bookings.push({
+
+              id:docSnap.id,
+
+              ...docSnap.data()
+
+            });
+
+          }
+        );
+
+
+        /* SORT NEWEST FIRST */
+
+        bookings.sort(
+          (a,b) => {
+
+            const dateA =
+              `${a.date || ""} ${a.time || ""}`;
+
+            const dateB =
+              `${b.date || ""} ${b.time || ""}`;
+
+            return dateB.localeCompare(
+              dateA
+            );
+
+          }
+        );
+
+
+        /* ==========================
+           NEW BOOKING DETECTION
+        ========================== */
+
+        const currentIds =
+          new Set(
+            bookings.map(
+              b => b.id
+            )
+          );
+
+
+        if(!firstLoad){
+
+          const newBooking =
+            bookings.some(
+              booking =>
+                !previousBookingIds.has(
+                  booking.id
+                )
+            );
+
+
+          if(newBooking){
+
+            const bell =
+              document.getElementById(
+                "bell"
+              );
+
+
+            bell.currentTime = 0;
+
+
+            bell.play()
+              .catch(
+                () => {}
+              );
+
+          }
+
+        }
+
+
+        previousBookingIds =
+          currentIds;
+
+
+        firstLoad = false;
+
+
+        renderBookings(
+          bookings
+        );
+
+
+      },
+
+
+      (error) => {
+
+        console.error(
+          "Firestore error:",
+          error
+        );
+
+
+        document.getElementById(
+          "bookings"
+        ).innerHTML = `
+
+          <div class="empty">
+
+            ❌ Unable to load bookings.
+
+            <br><br>
+
+            ${escapeHTML(
+              error.message
+            )}
+
+          </div>
+
+        `;
+
+      }
+
+    );
+
+}
+
+
+/* ================================
+   RENDER BOOKINGS
+================================ */
+
+function renderBookings(
+  bookings
+){
+
 
   const container =
-    document.getElementById("bookings");
+    document.getElementById(
+      "bookings"
+    );
 
+
+  /* ACTIVE BOOKINGS */
 
   const activeBookings =
-  bookings.filter(
-    b => (b.status || "pending").toLowerCase() !== "cancelled"
-  );
+    bookings.filter(
+      b =>
+        (
+          b.status ||
+          "pending"
+        ).toLowerCase()
+        !==
+        "cancelled"
+    );
 
-const total =
-  activeBookings.length;
 
+  /* TOTAL */
+
+  const total =
+    activeBookings.length;
+
+
+  /* PENDING */
 
   const pending =
     bookings.filter(
-      b => (b.status || "pending").toLowerCase()
-      === "pending"
+      b =>
+        (
+          b.status ||
+          "pending"
+        ).toLowerCase()
+        ===
+        "pending"
     ).length;
 
 
+  /* CONFIRMED */
+
   const confirmed =
     bookings.filter(
-      b => (b.status || "").toLowerCase()
-      === "confirmed"
+      b =>
+        (
+          b.status ||
+          ""
+        ).toLowerCase()
+        ===
+        "confirmed"
     ).length;
 
 
   document.getElementById(
     "totalBookings"
-  ).innerText = total;
+  ).innerText =
+    total;
 
 
   document.getElementById(
     "pendingBookings"
-  ).innerText = pending;
+  ).innerText =
+    pending;
 
 
   document.getElementById(
     "confirmedBookings"
-  ).innerText = confirmed;
+  ).innerText =
+    confirmed;
 
 
-  if(bookings.length === 0){
+  /* NO BOOKINGS */
+
+  if(activeBookings.length === 0){
 
     container.innerHTML = `
 
       <div class="empty">
 
-        📅 No table bookings yet.
+        📅 No active table bookings.
 
       </div>
 
@@ -505,199 +757,275 @@ const total =
   container.innerHTML = "";
 
 
-  activeBookings.forEach((booking) => {
+  /* CREATE EACH BOOKING */
 
-    const status =
-      (booking.status || "pending")
-      .toLowerCase();
-
-
-    const card =
-      document.createElement("div");
-
-    card.className =
-      `booking ${status}`;
+  activeBookings.forEach(
+    (booking) => {
 
 
-    const name =
-      booking.name || "Unknown";
+      const status =
+        (
+          booking.status ||
+          "pending"
+        ).toLowerCase();
 
 
-    const phone =
-      booking.phone || "-";
+      const card =
+        document.createElement(
+          "div"
+        );
 
 
-    const people =
-      booking.people || "-";
+      card.className =
+        `booking ${status}`;
 
 
-    const date =
-      booking.date || "-";
+      const name =
+        booking.name ||
+        "Unknown";
 
 
-    const time =
-      booking.time || "-";
+      const phone =
+        booking.phone ||
+        "-";
 
 
-    const specialRequest =
-      booking.specialRequest || "No special request";
+      const people =
+        booking.people ||
+        "-";
 
 
-    card.innerHTML = `
-
-      <div class="booking-header">
-
-        <h3>
-          👤 ${escapeHTML(name)}
-        </h3>
-
-        <span class="status ${status}">
-          ${status.toUpperCase()}
-        </span>
-
-      </div>
+      const date =
+        booking.date ||
+        "-";
 
 
-      <div class="details">
-
-        <div class="detail">
-
-          <strong>📅 Date</strong>
-
-          ${escapeHTML(date)}
-
-        </div>
+      const time =
+        booking.time ||
+        "-";
 
 
-        <div class="detail">
-
-          <strong>⏰ Time</strong>
-
-          ${escapeHTML(time)}
-
-        </div>
+      const specialRequest =
+        booking.specialRequest ||
+        "No special request";
 
 
-        <div class="detail">
+      card.innerHTML = `
 
-          <strong>👥 People</strong>
+        <div class="booking-header">
 
-          ${escapeHTML(String(people))}
+          <h3>
+
+            👤
+            ${escapeHTML(name)}
+
+          </h3>
+
+
+          <span
+            class="status ${status}">
+
+            ${escapeHTML(
+              status.toUpperCase()
+            )}
+
+          </span>
 
         </div>
 
 
-        <div class="detail">
+        <div class="details">
 
-          <strong>📱 Phone</strong>
 
-          ${escapeHTML(phone)}
+          <div class="detail">
+
+            <strong>
+              📅 Date
+            </strong>
+
+            ${escapeHTML(date)}
+
+          </div>
+
+
+          <div class="detail">
+
+            <strong>
+              ⏰ Time
+            </strong>
+
+            ${escapeHTML(time)}
+
+          </div>
+
+
+          <div class="detail">
+
+            <strong>
+              👥 People
+            </strong>
+
+            ${escapeHTML(
+              String(people)
+            )}
+
+          </div>
+
+
+          <div class="detail">
+
+            <strong>
+              📱 Phone
+            </strong>
+
+            ${escapeHTML(phone)}
+
+          </div>
+
 
         </div>
 
-      </div>
+
+        <div class="special">
+
+          <strong>
+            📝 Special Request
+          </strong>
+
+          <br><br>
+
+          ${escapeHTML(
+            specialRequest
+          )}
+
+        </div>
 
 
-      <div class="special">
-
-        <strong>📝 Special Request</strong>
-
-        <br><br>
-
-        ${escapeHTML(specialRequest)}
-
-      </div>
+        <div class="actions">
 
 
-      <div class="actions">
+          ${
+            status !== "confirmed"
 
-        ${
-          status !== "confirmed"
-          ? `
-            <button
-              class="confirm"
-              onclick="changeStatus('${booking.id}','confirmed')">
+            ? `
 
-              ✅ Confirm
+              <button
+                class="confirm"
+                onclick="changeStatus(
+                  '${escapeHTML(booking.id)}',
+                  'confirmed'
+                )">
 
-            </button>
-          `
-          : ""
-        }
+                ✅ Confirm
 
+              </button>
 
-        ${
-          status !== "cancelled"
-          ? `
-            <button
-              class="cancel"
-              onclick="changeStatus('${booking.id}','cancelled')">
+            `
 
-              ❌ Cancel
+            : ""
 
-            </button>
-          `
-          : ""
-        }
+          }
 
 
-        ${
-          phone !== "-"
-          ? `
-            <a
-              class="action-link call"
-              href="tel:${phone}">
+          <button
+            class="cancel"
+            onclick="changeStatus(
+              '${escapeHTML(booking.id)}',
+              'cancelled'
+            )">
 
-              📞 Call
+            ❌ Cancel
 
-            </a>
-
-            <a
-              class="action-link whatsapp"
-              target="_blank"
-              href="https://wa.me/91${phone}?text=${encodeURIComponent(
-                "Hello " + name +
-                ", your table booking at Dal Baati Special has been received."
-              )}">
-
-              💬 WhatsApp
-
-            </a>
-          `
-          : ""
-        }
-
-      </div>
-
-    `;
+          </button>
 
 
-    container.appendChild(card);
+          ${
+            phone !== "-"
 
-  });
+            ? `
+
+              <a
+                class="action-link call"
+                href="tel:${encodeURIComponent(phone)}">
+
+                📞 Call
+
+              </a>
+
+
+              <a
+                class="action-link whatsapp"
+                target="_blank"
+                href="https://wa.me/91${encodeURIComponent(phone)}?text=${encodeURIComponent(
+                  "Hello " +
+                  name +
+                  ", your table booking at Dal Baati Special has been received."
+                )}">
+
+                💬 WhatsApp
+
+              </a>
+
+            `
+
+            : ""
+
+          }
+
+
+        </div>
+
+      `;
+
+
+      container.appendChild(
+        card
+      );
+
+
+    }
+  );
 
 }
 
 
-/* UPDATE STATUS */
+/* ================================
+   CHANGE BOOKING STATUS
+================================ */
 
 window.changeStatus =
-  async function(bookingId,newStatus){
+  async function(
+    bookingId,
+    newStatus
+  ){
 
     try{
 
+
       await updateDoc(
-        doc(db,"bookings",bookingId),
+
+        doc(
+          db,
+          "bookings",
+          bookingId
+        ),
+
         {
-          status:newStatus
+          status:
+            newStatus
         }
+
       );
+
 
     }
 
     catch(error){
 
-      console.error(error);
+      console.error(
+        error
+      );
+
 
       alert(
         "❌ Could not update booking: " +
@@ -709,49 +1037,117 @@ window.changeStatus =
   };
 
 
-/* BASIC HTML SAFETY */
+/* ================================
+   HTML SAFETY
+================================ */
 
-function escapeHTML(value){
+function escapeHTML(
+  value
+){
 
   return String(value)
 
-    .replaceAll("&","&amp;")
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
 
-    .replaceAll("<","&lt;")
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
 
-    .replaceAll(">","&gt;")
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
 
-    .replaceAll('"',"&quot;")
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
 
-    .replaceAll("'","&#039;");
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
 
 }
 
 
-/* ENABLE AUDIO AFTER USER INTERACTION */
+/* ================================
+   LOGOUT
+================================ */
+
+document.getElementById(
+  "logoutBtn"
+).addEventListener(
+  "click",
+  async () => {
+
+    try{
+
+      await signOut(auth);
+
+      window.location.replace(
+        "admin-login.html"
+      );
+
+    }
+
+    catch(error){
+
+      console.error(
+        error
+      );
+
+      alert(
+        "Could not logout."
+      );
+
+    }
+
+  }
+);
+
+
+/* ================================
+   ENABLE AUDIO AFTER CLICK
+================================ */
 
 document.addEventListener(
   "click",
   () => {
 
     const bell =
-      document.getElementById("bell");
+      document.getElementById(
+        "bell"
+      );
+
 
     bell.play()
-      .then(() => {
+      .then(
+        () => {
 
-        bell.pause();
+          bell.pause();
 
-        bell.currentTime = 0;
+          bell.currentTime = 0;
 
-      })
-      .catch(() => {});
+        }
+      )
+      .catch(
+        () => {}
+      );
 
   },
-  {once:true}
+  {
+    once:true
+  }
 );
+
 
 </script>
 
 </body>
+
 </html>
