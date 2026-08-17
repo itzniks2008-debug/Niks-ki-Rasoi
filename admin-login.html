@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 
 <meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+      content="width=device-width, initial-scale=1.0">
 
 <title>Dal Baati Special | Admin Login</title>
 
@@ -74,17 +74,12 @@ input{
   outline:none;
 }
 
-input:focus{
-  border-color:#b88620;
-  box-shadow:0 0 0 2px rgba(184,134,32,.15);
-}
-
 .password-box{
   position:relative;
 }
 
 .password-box input{
-  padding-right:85px;
+  padding-right:75px;
 }
 
 .show-btn{
@@ -97,11 +92,6 @@ input:focus{
   border:none;
   border-radius:7px;
   cursor:pointer;
-  font-size:14px;
-}
-
-.show-btn:active{
-  transform:scale(.97);
 }
 
 .login-btn{
@@ -114,14 +104,6 @@ input:focus{
   font-size:18px;
   font-weight:bold;
   cursor:pointer;
-}
-
-.login-btn:hover{
-  background:#56100b;
-}
-
-.login-btn:active{
-  transform:scale(.99);
 }
 
 .login-btn:disabled{
@@ -150,7 +132,6 @@ input:focus{
 
 </head>
 
-
 <body>
 
 <div class="login-box">
@@ -163,12 +144,7 @@ input:focus{
     Restaurant Owner Login
   </p>
 
-
-  <div
-    id="error"
-    class="error">
-  </div>
-
+  <div id="error" class="error"></div>
 
   <label for="email">
     📧 Email
@@ -179,7 +155,6 @@ input:focus{
     id="email"
     placeholder="Enter your email"
     autocomplete="email">
-
 
   <label for="password">
     🔐 Password
@@ -195,15 +170,14 @@ input:focus{
 
     <button
       type="button"
-      id="showPasswordBtn"
-      class="show-btn">
+      class="show-btn"
+      id="showPasswordBtn">
 
       Show
 
     </button>
 
   </div>
-
 
   <button
     type="button"
@@ -214,7 +188,6 @@ input:focus{
 
   </button>
 
-
   <div class="footer">
     Authorized restaurant staff only
   </div>
@@ -222,14 +195,9 @@ input:focus{
 </div>
 
 
-
 <script type="module">
 
-/* ================================
-   FIREBASE IMPORTS
-================================ */
-
-  import {
+import {
   initializeApp
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 
@@ -241,9 +209,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 
-/* ================================
-   FIREBASE CONFIG
-================================ */
+/* FIREBASE CONFIG */
 
 const firebaseConfig = {
 
@@ -271,10 +237,6 @@ const firebaseConfig = {
 };
 
 
-/* ================================
-   INITIALIZE FIREBASE
-================================ */
-
 const app =
   initializeApp(firebaseConfig);
 
@@ -282,33 +244,27 @@ const auth =
   getAuth(app);
 
 
-/* ================================
-   GET HTML ELEMENTS
-================================ */
-
 const emailInput =
   document.getElementById("email");
 
 const passwordInput =
   document.getElementById("password");
 
-const errorBox =
-  document.getElementById("error");
-
 const loginBtn =
   document.getElementById("loginBtn");
+
+const errorBox =
+  document.getElementById("error");
 
 const showPasswordBtn =
   document.getElementById("showPasswordBtn");
 
 
-/* ================================
-   SHOW / HIDE PASSWORD
-================================ */
+/* SHOW PASSWORD */
 
 showPasswordBtn.addEventListener(
   "click",
-  function(){
+  () => {
 
     if(passwordInput.type === "password"){
 
@@ -331,9 +287,7 @@ showPasswordBtn.addEventListener(
 );
 
 
-/* ================================
-   LOGIN FUNCTION
-================================ */
+/* LOGIN */
 
 async function login(){
 
@@ -344,15 +298,11 @@ async function login(){
     passwordInput.value;
 
 
-  /* CLEAR PREVIOUS ERROR */
-
   errorBox.style.display =
     "none";
 
 
-  /* CHECK EMPTY FIELDS */
-
-  if(email === "" || password === ""){
+  if(!email || !password){
 
     errorBox.innerText =
       "Please enter email and password.";
@@ -365,8 +315,6 @@ async function login(){
   }
 
 
-  /* DISABLE LOGIN BUTTON */
-
   loginBtn.disabled =
     true;
 
@@ -376,29 +324,44 @@ async function login(){
 
   try{
 
-    /* FIREBASE LOGIN */
+    /*
+      Save authentication locally
+      BEFORE signing in.
+    */
 
     await setPersistence(
-  auth,
-  browserLocalPersistence
-);
-
-await signInWithEmailAndPassword(
-  auth,
-  email,
-  password
-);
-
-window.location.replace("admin.html");
+      auth,
+      browserLocalPersistence
+    );
 
 
-    /* LOGIN SUCCESS */
+    /*
+      Firebase login
+    */
 
-    window.location.href =
-      "admin.html";
+    const result =
+      await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+
+    console.log(
+      "LOGIN SUCCESS:",
+      result.user.email
+    );
+
+
+    /*
+      ONLY ONE REDIRECT
+    */
+
+    window.location.replace(
+      "admin.html"
+    );
 
   }
-
 
   catch(error){
 
@@ -408,16 +371,13 @@ window.location.replace("admin.html");
     );
 
 
-    /* LOGIN FAILED */
-
     errorBox.innerText =
-      "❌ Invalid email or password.";
+      "❌ " + getErrorMessage(error);
+
 
     errorBox.style.display =
       "block";
 
-
-    /* ENABLE BUTTON AGAIN */
 
     loginBtn.disabled =
       false;
@@ -430,9 +390,52 @@ window.location.replace("admin.html");
 }
 
 
-/* ================================
-   LOGIN BUTTON CLICK
-================================ */
+/* FIREBASE ERROR */
+
+function getErrorMessage(error){
+
+  if(
+    error.code ===
+    "auth/invalid-credential"
+  ){
+
+    return "Invalid email or password.";
+
+  }
+
+  if(
+    error.code ===
+    "auth/user-not-found"
+  ){
+
+    return "Account not found.";
+
+  }
+
+  if(
+    error.code ===
+    "auth/wrong-password"
+  ){
+
+    return "Incorrect password.";
+
+  }
+
+  if(
+    error.code ===
+    "auth/invalid-email"
+  ){
+
+    return "Invalid email address.";
+
+  }
+
+  return error.message;
+
+}
+
+
+/* BUTTON */
 
 loginBtn.addEventListener(
   "click",
@@ -440,13 +443,11 @@ loginBtn.addEventListener(
 );
 
 
-/* ================================
-   ENTER KEY LOGIN
-================================ */
+/* ENTER KEY */
 
 document.addEventListener(
   "keydown",
-  function(event){
+  event => {
 
     if(event.key === "Enter"){
 
@@ -458,7 +459,6 @@ document.addEventListener(
 );
 
 </script>
-
 
 </body>
 </html>
