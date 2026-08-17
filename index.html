@@ -882,7 +882,9 @@ import {
   getFirestore,
   collection,
   addDoc,
-  serverTimestamp
+  serverTimestamp,
+  doc,
+  runTransaction
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 
@@ -922,6 +924,51 @@ const app =
 const db =
   getFirestore(app);
 
+// DAILY BOOKING NUMBER
+async function getNextBookingNumber(date) {
+
+  const counterRef = doc(
+    db,
+    "bookingCounters",
+    date
+  );
+
+  const bookingNumber = await runTransaction(
+    db,
+    async (transaction) => {
+
+      const counterSnap =
+        await transaction.get(counterRef);
+
+      let nextNumber = 1;
+
+      if (counterSnap.exists()) {
+
+        nextNumber =
+          (counterSnap.data().lastNumber || 0) + 1;
+
+      }
+
+      transaction.set(
+        counterRef,
+        {
+          lastNumber: nextNumber
+        },
+        {
+          merge: true
+        }
+      );
+
+      return nextNumber;
+
+    }
+  );
+
+  return bookingNumber;
+
+}
+
+  
 const bookingButton =
   document.getElementById("bookingButton");
 
@@ -961,7 +1008,6 @@ const indiaDate =
     }
   ).format(now);
 
-
 const indiaTime =
   new Intl.DateTimeFormat(
     "en-GB",
@@ -972,7 +1018,7 @@ const indiaTime =
       hour12: false
     }
   ).format(now);
-
+const bookingNumber = await getNextBookingNumber(indiaDate);
 
 /* BOOKING HOURS: 7:30 PM - 11:00 PM */
 
@@ -1041,6 +1087,8 @@ if(
 
           time: indiaTime,
 
+          bookingNumber: bookingNumber,
+          
           specialRequest:
             specialRequest || "",
 
@@ -1055,7 +1103,7 @@ if(
 
 
       showMessage(
-        "✅ Table booking received! We will contact you shortly.",
+        `✅ Booking received! Your booking number is #${bookingNumber}. We will contact you shortly.`,
         true
       );
 
