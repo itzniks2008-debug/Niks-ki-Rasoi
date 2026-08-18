@@ -543,23 +543,23 @@ function startBookingListener(){
         );
 
 
-        /* SORT NEWEST FIRST */
+        /* SORT OLDEST FIRST */
 
-        bookings.sort(
-          (a,b) => {
+bookings.sort(
+  (a,b) => {
 
-            const dateA =
-              `${a.date || ""} ${a.time || ""}`;
+    const dateA =
+      `${a.date || ""} ${a.time || ""}`;
 
-            const dateB =
-              `${b.date || ""} ${b.time || ""}`;
+    const dateB =
+      `${b.date || ""} ${b.time || ""}`;
 
-            return dateB.localeCompare(
-              dateA
-            );
+    return dateA.localeCompare(
+      dateB
+    );
 
-          }
-        );
+  }
+);
 
 
         /* ==========================
